@@ -120,6 +120,28 @@ CPython is the **reference implementation** of the Python programming language, 
 Hence, **PyPy, as a JIT compiler,** can achieve speeds comparable to Java in many cases, though it, like Java, may experience slower JIT warm-up times. However, PyPy still retains Python's Global Interpreter Lock (GIL) (except in specialized cases like PyPy STM), giving **Java a clear advantage in heavy multi-threading scenarios.**
 
 
+### BLAS
+BLAS (Basic Linear Algebra Subprograms) can utilize multithreading in Python through libraries that wrap the BLAS routines, such as NumPy or SciPy. The underlying BLAS implementation (e.g., OpenBLAS, Intel MKL, or ATLAS) typically supports multithreading to speed up linear algebra operations.
+
+Here’s how you can enable multithreading for BLAS in Python:
+1. **NumPy and SciPy**: By default, NumPy uses the BLAS libraries installed on your system, which may be multithreaded. If you're using a multithreaded BLAS (like OpenBLAS or Intel MKL), it will automatically utilize multiple threads for operations like matrix multiplication or solving linear systems.
+2. **Set Environment Variables**: Many BLAS implementations, such as OpenBLAS or MKL, can be configured to use multiple threads by setting environment variables:
+
+For OpenBLAS, you can set OPENBLAS_NUM_THREADS to specify the number of threads.
+
+For Intel MKL, you can use MKL_NUM_THREADS to control the number of threads.
+```python
+import os
+os.environ["MKL_NUM_THREADS"] = "4"  # Set to 4 threads
+```
+
+3. **Threading Control**: If you are using a specific BLAS library, you can also manually control the threading settings using that library's API (e.g., Intel MKL's mkl.set_num_threads() function).
+
+This will ensure that operations like matrix multiplication in NumPy or SciPy benefit from multiple CPU cores, leading to faster computations.
+
+
+
+
 # Difference between Concurrency and Parallelism
 
 | Concurrency | Parallelism |
